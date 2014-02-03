@@ -1,0 +1,13 @@
+{
+    "port": 3000,
+    "User": "nodetestproj@gmail.com",
+    "Pass": "1nodetestproj",
+    "Type": "SMTP",
+    "Service": "Gmail",
+    "imapHost" : "imap.gmail.com",
+    "imapPort" : 993,
+    "imapSecure" : true,
+    "imapMailbox" : "INBOX",
+    "imapMarkSeen" : true,
+    "imapFetchUnreadOnStart" : true
+}
