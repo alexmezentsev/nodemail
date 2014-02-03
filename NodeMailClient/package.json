@@ -11,6 +11,8 @@
     "winston": "~0.7.2",
     "nconf": "~0.6.9",
     "sequelize": "~1.7.0-rc4",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "nodemailer": "~0.6.0",
+    "where": "~0.1.0"
   }
 }
