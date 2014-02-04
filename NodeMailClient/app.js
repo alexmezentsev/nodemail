@@ -5,7 +5,8 @@ var mail            = require('./routes/mail');
 var config          = require('./lib/config');
 var http            = require('http');
 var path            = require('path');
-var logger          = require('./lib/logger');
+var winston         = require('winston');
+var logger          = require('./lib/logger')(module);
 var errorHandler      = require('./middleware/errorHandling');
 
 var app = express();

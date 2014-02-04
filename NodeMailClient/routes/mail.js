@@ -1,4 +1,5 @@
-var mailHelper = require('../Helpers/mail-helper');
+var mailHelper      = require('../Helpers/mail-helper');
+
 
 exports.mail = function(req, res){
     mailHelper.sendMail();
