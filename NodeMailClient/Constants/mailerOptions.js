@@ -1,12 +1,9 @@
-/**
- * Created by alexander.mezentsev on 2/3/14.
- */
 var nodeConfig = require('nconf');
 
 exports.credentials = {
     User: nodeConfig.get('User'),
     Pass: nodeConfig.get('Pass')
-}
+};
 
 exports.mailerTransportOptions = {
     Type : nodeConfig.get('Type'),

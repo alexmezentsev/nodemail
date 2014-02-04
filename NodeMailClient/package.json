@@ -14,6 +14,7 @@
     "socket.io": "~0.9.16",
     "nodemailer": "~0.6.0",
     "where": "~0.1.0",
-    "mail-listener": "~0.7.1"
+    "mail-listener": "~0.7.1",
+    "when": "~2.8.0"
   }
 }

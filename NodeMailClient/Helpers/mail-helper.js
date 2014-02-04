@@ -1,11 +1,8 @@
-/**
- * Created by alexander.mezentsev on 2/3/14.
- */
-
-var transportHelper = require('./transport-helper');
-var listenerHelper = require('./listener-helper');
-var Imap = require('imap');
-    inspect = require('util').inspect;
+var transportHelper     = require('./transport-helper');
+var listenerHelper      = require('./listener-helper');
+var Imap                = require('imap');
+var inspect             = require('util').inspect;
+var logger              = require('../lib/logger')(module);
 
 // setup e-mail data with unicode symbols
 var mailOptions = {
@@ -17,18 +14,15 @@ var mailOptions = {
 }
 
 // send mail with defined transport object
-var sendMail = function(req, response){
-    transportHelper.transport.sendMail(mailOptions, function(error, res){
+var sendMail = function(){
+    transportHelper.transport.sendMail(mailOptions, function(error ,actualResult){
         if(error){
-            console.log(error);
+            logger.info(error);
         }else{
-            console.log("Message sent: " + res.message);
-            response.writeHead(200, {"Content-Type": "text/plain"});
-            response.write(res.message);
-            response.end();
+            logger.info("Message sent: " + actualResult.message);
         }
-        // if you don't want to use this transport object anymore, uncomment following line
-        transportHelper.transport.close(); // shut down the connection pool, no more messages
+
+        transportHelper.transport.close();
     });
 }
 
