@@ -4,6 +4,8 @@
 
 var transportHelper = require('./transport-helper');
 var listenerHelper = require('./listener-helper');
+var Imap = require('imap');
+    inspect = require('util').inspect;
 
 // setup e-mail data with unicode symbols
 var mailOptions = {
@@ -31,10 +33,62 @@ var sendMail = function(req, response){
 }
 
 var listenMails = function(req, response){
+    response.writeHead(200, {"Content-Type": "text/plain"});
+    listenerHelper.imap.once('ready', function() {
+        openInbox(function(err, box) {
+            if (err) throw err;
+            var f = listenerHelper.imap.seq.fetch('1:3', {
+                bodies: 'HEADER.FIELDS (FROM TO SUBJECT DATE)',
+                struct: true
+            });
+            f.on('message', function(msg, seqno) {
+                console.log('Message #%d', seqno);
+                var prefix = '(#' + seqno + ') ';
+                msg.on('body', function(stream, info) {
+                    var buffer = '';
+                    stream.on('data', function(chunk) {
+                        buffer += chunk.toString('utf8');
+                    });
+                    stream.once('end', function() {
+                        var headers = inspect(Imap.parseHeader(buffer));
+                        console.log(prefix + 'Parsed header: %s', headers);
+                        response.write(headers);
+                    });
+                });
+                msg.once('attributes', function(attrs) {
+                    console.log(prefix + 'Attributes: %s', inspect(attrs, false, 8));
+                });
+                msg.once('end', function() {
+                    console.log(prefix + 'Finished');
+                    response.end();
+                });
+            });
+            f.once('error', function(err) {
+                console.log('Fetch error: ' + err);
+            });
+            f.once('end', function() {
+                console.log('Done fetching all messages!');
+                listenerHelper.imap.end();
+            });
+        });
+    });
 
+    listenerHelper.imap.once('error', function(err) {
+        console.log(err);
+    });
+
+    listenerHelper.imap.once('end', function() {
+        console.log('Connection ended');
+    });
+
+    listenerHelper.imap.connect();
 
 }
 
+
+function openInbox(cb) {
+    listenerHelper.imap.openBox('INBOX', true, cb);
+}
 
 exports.listenMails = listenMails;
 

@@ -4,6 +4,20 @@
 
 var config = require('../Helpers/config');
 var mailerConfig = require('../Constants/mailerOptions');
+var Imap = require('imap'),
+    inspect = require('util').inspect;
+
+var imap = new Imap({
+    user: mailerConfig.credentials.User,
+    password: mailerConfig.credentials.Pass,
+    host: mailerConfig.imapOptions.ImapHost,
+    port: mailerConfig.imapOptions.ImapPort,
+    tls: true,
+    tlsOptions: { rejectUnauthorized: false }
+});
+
+exports.imap = imap;
+
 
 //var imapListener = function(){
 //    return new MailListener({
@@ -18,4 +32,4 @@ var mailerConfig = require('../Constants/mailerOptions');
 //});
 //}
 
-exports.imapListener = imapListener;
+//exports.imapListener = imapListener;
