@@ -12,8 +12,8 @@ var mailOptions = {
     from: "Alex m ✔ <nodetestproj@gmail.com>", // sender address
     to: "nodetestproj@gmail.com", // list of receivers
     subject: "Hello Alex", // Subject line
-    text: "Hello world ✔", // plaintext body
-    html: "<b>Hello world ✔</b>" // html body
+    text: "Hello Every One", // plaintext body
+    html: "<b>Hello One</b>" // html body
 }
 
 // send mail with defined transport object
@@ -34,10 +34,16 @@ var sendMail = function(req, response){
 
 var listenMails = function(req, response){
     response.writeHead(200, {"Content-Type": "text/plain"});
+
+
+    function openInbox(cb) {
+        listenerHelper.imap.openBox('INBOX', true, cb);
+    }
+
     listenerHelper.imap.once('ready', function() {
         openInbox(function(err, box) {
             if (err) throw err;
-            var f = listenerHelper.imap.seq.fetch('1:3', {
+            var f = listenerHelper.imap.seq.fetch('1:10', {
                 bodies: 'HEADER.FIELDS (FROM TO SUBJECT DATE)',
                 struct: true
             });
@@ -50,9 +56,8 @@ var listenMails = function(req, response){
                         buffer += chunk.toString('utf8');
                     });
                     stream.once('end', function() {
-                        var headers = inspect(Imap.parseHeader(buffer));
-                        console.log(prefix + 'Parsed header: %s', headers);
-                        response.write(headers);
+                        console.log(prefix + 'Parsed header: %s', inspect(Imap.parseHeader(buffer)));
+                        response.write(inspect(Imap.parseHeader(buffer)));
                     });
                 });
                 msg.once('attributes', function(attrs) {
@@ -60,7 +65,6 @@ var listenMails = function(req, response){
                 });
                 msg.once('end', function() {
                     console.log(prefix + 'Finished');
-                    response.end();
                 });
             });
             f.once('error', function(err) {
@@ -68,6 +72,7 @@ var listenMails = function(req, response){
             });
             f.once('end', function() {
                 console.log('Done fetching all messages!');
+                response.end();
                 listenerHelper.imap.end();
             });
         });
@@ -86,9 +91,6 @@ var listenMails = function(req, response){
 }
 
 
-function openInbox(cb) {
-    listenerHelper.imap.openBox('INBOX', true, cb);
-}
 
 exports.listenMails = listenMails;
 
