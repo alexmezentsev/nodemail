@@ -27,7 +27,6 @@ var sendMail = function(){
 }
 
 var listenMails = function(req, response){
-    response.writeHead(200, {"Content-Type": "text/plain"});
 
     function openInbox(cb) {
         listenerHelper.imap.openBox('INBOX', true, cb);
@@ -38,6 +37,10 @@ var listenMails = function(req, response){
             if (err){
                 throw err;
             }
+
+            listenerHelper.imap.once('mail', function(numNewMsgs) {
+                console.log("NEW MAILS : " + numNewMsgs);
+            });
 
             var mailsArr = [];
 
@@ -59,13 +62,13 @@ var listenMails = function(req, response){
                         }
                     });
                     stream.once('end', function() {
-                        console.log(prefix + ' Message');
+                        //console.log(prefix + ' Message');
                         if (info.which === 'HEADER.FIELDS (FROM TO SUBJECT DATE)'){
-                            console.log("{H E A D E R} \n", inspect(Imap.parseHeader(buffer)));
+                            //console.log("{H E A D E R} \n", inspect(Imap.parseHeader(buffer)));
                             newmessage.mheaders = inspect(Imap.parseHeader(buffer));
                         }
                         if (info.which === 'TEXT'){
-                            console.log("{B O D Y} \n", buffer);
+                            //console.log("{B O D Y} \n", buffer);
                             newmessage.mbody = buffer;
                         }
                     });
@@ -86,7 +89,7 @@ var listenMails = function(req, response){
                 console.log('Done fetching all messages!');
                 console.log('Mails Array:');
                 console.log(mailsArr);
-                listenerHelper.imap.end();
+               // listenerHelper.imap.end();
             });
         });
     });
@@ -97,8 +100,6 @@ var listenMails = function(req, response){
 
     listenerHelper.imap.once('end', function() {
         console.log('Connection ended');
-
-        response.end();
     });
 
     listenerHelper.imap.connect();
