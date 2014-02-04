@@ -41,7 +41,7 @@ var listenMails = function(req, response){
 
             var mailsArr = [];
 
-            var fetch = listenerHelper.imap.seq.fetch('1:4', {
+            var fetch = listenerHelper.imap.seq.fetch('1:*', {
                 bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
                 struct: true
             });
@@ -60,7 +60,6 @@ var listenMails = function(req, response){
                     });
                     stream.once('end', function() {
                         console.log(prefix + ' Message');
-                        newmessage.mid = prefix;
                         if (info.which === 'HEADER.FIELDS (FROM TO SUBJECT DATE)'){
                             console.log("{H E A D E R} \n", inspect(Imap.parseHeader(buffer)));
                             newmessage.mheaders = inspect(Imap.parseHeader(buffer));
@@ -70,6 +69,9 @@ var listenMails = function(req, response){
                             newmessage.mbody = buffer;
                         }
                     });
+                });
+                msg.once('attributes', function(attrs) {
+                    newmessage.mid = attrs.uid;
                 });
                 msg.once('end', function() {
                     mailsArr.push(newmessage);
@@ -102,8 +104,6 @@ var listenMails = function(req, response){
     listenerHelper.imap.connect();
 
 }
-
-
 
 exports.listenMails = listenMails;
 
