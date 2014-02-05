@@ -6,6 +6,6 @@
 var mailHelper = require('../Helpers/mail-helper');
 
 exports.list = function(req, res){
-    mailHelper.listenMails(req, res);
-  //res.send("respond with a resource");
+    mailHelper.getMails();
+    setTimeout(res.end(), 5000);
 };

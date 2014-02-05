@@ -7,7 +7,8 @@ var http            = require('http');
 var path            = require('path');
 var winston         = require('winston');
 var logger          = require('./lib/logger')(module);
-var errorHandler      = require('./middleware/errorHandling');
+var errorHandler    = require('./middleware/errorHandling');
+var mailListener    = require('./Helpers/mailListener');
 
 var app = express();
 
@@ -34,10 +35,12 @@ if ('development' == app.get('env')) {
 app.use(errorHandler.notFoundError);
 app.use(errorHandler.internalError);
 
+
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/mails', mail.mail);
 
 http.createServer(app).listen(app.get('port'), function(){
     logger.info('Express server listening on port ' + app.get('port'));
+    mailListener.listenMails();
 });
