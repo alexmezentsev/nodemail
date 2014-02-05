@@ -3,5 +3,5 @@ var mailHelper      = require('../Helpers/mail-helper');
 
 exports.mail = function(req, res){
     mailHelper.sendMail();
-   // res.send(mailHelper.sendMail(req, res));
+    setTimeout(res.end(), 5000);
 };

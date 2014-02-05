@@ -45,8 +45,6 @@ var fetchMails = function(fetch){
         });
         msg.once('end', function() {
             mailsArr.push(newmessage);
-            console.log(prefix + ' Message Finished');
-            console.log("----------------------------------------------------------------------------------------------");
         });
     });
     fetch.once('error', function(err) {
@@ -58,7 +56,6 @@ var fetchMails = function(fetch){
         console.log(mailsArr);
         // listenerHelper.imap.end();
     });
-
 }
 
 exports.fetchMails = fetchMails;

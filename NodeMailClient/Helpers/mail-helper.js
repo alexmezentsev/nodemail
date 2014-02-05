@@ -1,9 +1,6 @@
 var logger              = require('../lib/logger')(module);
 var transportHelper     = require('./transport-helper');
 var listenerHelper      = require('./listener-helper');
-var Imap                = require('imap');
-var inspect             = require('util').inspect;
-
 
 // setup e-mail data with unicode symbols
 var mailOptions = {
@@ -26,36 +23,14 @@ var sendMail = function(){
     });
 }
 
-var getMails = function(req, response){
+var getMails = function(){
 
-    function openInbox(cb) {
-        listenerHelper.imap.openBox('INBOX', true, cb);
-    }
+     var fetch = listenerHelper.imap.seq.fetch('1:*', {
+         bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
+         struct: true
+         });
 
-    listenerHelper.imap.once('ready', function() {
-        openInbox(function(err, box) {
-            if (err){
-                throw err;
-            }
-
-            var fetch = listenerHelper.imap.seq.fetch('1:*', {
-                bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
-                struct: true
-            });
-
-            listenerHelper.fetchMails(fetch);
-        });
-    });
-
-    listenerHelper.imap.once('error', function(err) {
-        console.log(err);
-    });
-
-    listenerHelper.imap.once('end', function() {
-        console.log('Connection ended');
-    });
-
-    listenerHelper.imap.connect();
+     listenerHelper.fetchMails(fetch);
 
 }
 

@@ -12,7 +12,7 @@ var listenMails = function(){
                 throw err;
             }
             listenerHelper.imap.once('mail', function(numNewMsgs) {
-                console.log("NEW MAILS : " + numNewMsgs);
+                console.log("NEW MAILS!");
                 getNewMails();
             });
             getNewMails();
@@ -34,6 +34,7 @@ var listenMails = function(){
 var getNewMails = function(){
     listenerHelper.imap.search([ 'UNSEEN' ], function(err, results) {
         if(results.length !== 0){
+            console.log("You have " + results.length + " unseen mails");
             var fetch = listenerHelper.imap.fetch(results, {
                 bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
                 struct: true
@@ -41,7 +42,7 @@ var getNewMails = function(){
             listenerHelper.fetchMails(fetch);
         }
         else{
-            console.log("no new mail in INBOX");
+            console.log("no UNSEEN mails in INBOX");
         }
     });
 };
