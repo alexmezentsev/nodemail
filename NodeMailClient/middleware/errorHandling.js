@@ -5,9 +5,9 @@ var notFoundError = function(req,res, next){
     log.error('Router was not found : ' + req.url);
 
     var response = {
-        status  : 404,
-        message : 'Page not found',
-        call_stack : req.url
+        status      : 404,
+        message     : 'Page not found',
+        call_stack  : req.url
     };
 
     res.json(response);
@@ -18,9 +18,9 @@ var internalError = function(err, req, res, next){
     log.error('Internal error: ' + JSON.stringify(err));
 
     var response = {
-        status  : 500,
-        message : 'Internal server error',
-        call_stack : err.data
+        status      : 500,
+        message     : 'Internal server error',
+        call_stack  : err.data
     };
 
     res.json(response);

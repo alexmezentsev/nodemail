@@ -1,18 +1,20 @@
-var listenerHelper      = require('./listener-helper');
-var inspect             = require('util').inspect;
+var listenerHelper      = require('./listener-helper'),
+    inspect             = require('util').inspect,
+    logger              = require('../lib/logger')(module);
 
 var listenMails = function(){
-    console.log("Start listening mails...");
+    logger.info("Start listening mails...");
     function openInbox(cb) {
         listenerHelper.imap.openBox('INBOX', true, cb);
     }
     listenerHelper.imap.once('ready', function() {
         openInbox(function(err, box) {
-            if (err){
+            if (err)
+            {
                 throw err;
             }
-            listenerHelper.imap.once('mail', function(numNewMsgs) {
-                console.log("NEW MAILS!");
+            listenerHelper.imap.once('mail', function() {
+                logger.info("NEW MAILS!");
                 getNewMails();
             });
             getNewMails();
@@ -20,11 +22,11 @@ var listenMails = function(){
     });
 
     listenerHelper.imap.once('error', function(err) {
-        console.log(err);
+        logger.error(err);
     });
 
     listenerHelper.imap.once('end', function() {
-        console.log('Connection ended');
+        logger.info('Connection ended');
     });
 
     listenerHelper.imap.connect();
@@ -33,19 +35,19 @@ var listenMails = function(){
 
 var getNewMails = function(){
     listenerHelper.imap.search([ 'UNSEEN' ], function(err, results) {
-        if(results.length !== 0){
-            console.log("You have " + results.length + " unseen mails");
+        if (results.length !== 0)
+        {
+            logger.info("You have " + results.length + " unseen mails");
             var fetch = listenerHelper.imap.fetch(results, {
                 bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
                 struct: true
             });
             listenerHelper.fetchMails(fetch);
-        }
-        else{
-            console.log("no UNSEEN mails in INBOX");
+        }else
+        {
+            logger.info("no UNSEEN mails in INBOX");
         }
     });
 };
-
 
 exports.listenMails = listenMails;

@@ -1,13 +1,13 @@
-var nodemailer       = require("nodemailer");
-var config           = require('../lib/config');
-var mailerConfig     = require('../Constants/mailerOptions');
+var nodemailer       = require("nodemailer"),
+    config           = require('../lib/config'),
+    mailerConfig     = require('../Constants/mailerOptions');
 
 // create reusable transport method (opens pool of SMTP connections)
 var transport = nodemailer.createTransport(mailerConfig.mailerTransportOptions.Type,{
-    service: mailerConfig.mailerTransportOptions.Service,
+    service     : mailerConfig.mailerTransportOptions.Service,
     auth: {
-        user: mailerConfig.credentials.User,
-        pass: mailerConfig.credentials.Pass
+        user    : mailerConfig.credentials.User,
+        pass    : mailerConfig.credentials.Pass
     }
 });
 

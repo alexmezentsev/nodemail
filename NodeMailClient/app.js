@@ -1,14 +1,14 @@
-var express         = require('express');
-var routes          = require('./routes');
-var user            = require('./routes/user');
-var mail            = require('./routes/mail');
-var config          = require('./lib/config');
-var http            = require('http');
-var path            = require('path');
-var winston         = require('winston');
-var logger          = require('./lib/logger')(module);
-var errorHandler    = require('./middleware/errorHandling');
-var mailListener    = require('./Helpers/mailListener');
+var express         = require('express'),
+    routes          = require('./routes'),
+    user            = require('./routes/user'),
+    mail            = require('./routes/mail'),
+    config          = require('./lib/config'),
+    http            = require('http'),
+    path            = require('path'),
+    winston         = require('winston'),
+    logger          = require('./lib/logger')(module),
+    errorHandler    = require('./middleware/errorHandling'),
+    mailListener    = require('./Helpers/mailListener');
 
 var app = express();
 
