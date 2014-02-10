@@ -1,31 +1,16 @@
 'use strict';
 var gridCtrl = function($scope, $http, searchingParameter, $route){
 
-    var parseData = function(data){
-
-        console.log(data[0]);
-        console.log(data[0].mheaders);
-        console.log(typeof data[0].mheaders);
-        console.log(JSON.parse(data[0].mheaders));
-
-
-        $scope.mailDate = data.mheaders.date;
-        $scope.mailFrom = data.mheaders.from;
-        $scope.mailTo = data.mheaders.to[0];
-        $scope.mailSubject = data.mheaders.subject[0];
-
-    };
-
     $http({method: 'GET', url: '/api/getAllMails'}).
         success(function(data, status, headers, config) {
-            parseData(data)
+            $scope.mailsData = data;
         }).
         error(function(data, status, headers, config) {
 
         });
 //    $scope.myData
 //    $scope.gridOptions = {
-//        data: 'myData',
+//        data: 'mailsData',
 //        enablePaging: true,
 //        enableRowSelection: false,
 //        showFooter: true,

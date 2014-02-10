@@ -34,11 +34,8 @@ var fetchMails = function(fetch, callback){
                 if (info.which === 'HEADER.FIELDS (FROM TO SUBJECT DATE)')
                 {
                     newmessage.mheaders = inspect(Imap.parseHeader(buffer));
-                    var tt = newmessage.mheaders.trim();
-                    newmessage.mheaders = JSON.parse(JSON.stringify(tt));
-                    console.log(JSON.parse(JSON.stringify(tt)));
-                    console.log(typeof(newmessage.mheaders));
-                    console.log('-----------------');
+                    var obj = eval("(" + newmessage.mheaders + ")");
+                    newmessage.mheaders = obj;
                 }
                 if (info.which === 'TEXT')
                 {
