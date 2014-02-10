@@ -39,14 +39,18 @@ app.use(errorHandler.internalError);
 // Routes.
 app.get('/', routes.index);
 app.get('/partials/:name', routes.partial);
-app.get('*', routes.index);
+
 
 // JSON API.
+app.get('/api/getAllMails', api.getAllMails);
 app.get('/api/versionInfo', api.versionInfo);
 app.get('/api/userLogin', api.getUserLogin);
 
+
 //app.get('/users', user.list);
 //app.get('/mails', mail.mail);
+
+app.get('*', routes.index);
 
 http.createServer(app).listen(app.get('port'), function(){
     logger.info('Express server listening on port ' + app.get('port'));

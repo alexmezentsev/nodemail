@@ -4,6 +4,6 @@ function versionInfoCtrl($scope, $http) {
             $scope.version = data.version;
         }).
         error(function(data, status, headers, config) {
-            $scope.version = ''
+            $scope.version = 'Error'
         });
 };

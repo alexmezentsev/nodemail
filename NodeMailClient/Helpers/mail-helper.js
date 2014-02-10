@@ -24,12 +24,15 @@ var sendMail = function(){
     });
 }
 
-var getMails = function(){
+var getMails = function(calback){
      var fetch = listenerHelper.imap.seq.fetch('1:*', {
          bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
          struct: true
          });
-     listenerHelper.fetchMails(fetch);
+     listenerHelper.fetchMails(fetch, function(){
+         calback.call(this);
+     });
+
 }
 
 exports.getMails = getMails;

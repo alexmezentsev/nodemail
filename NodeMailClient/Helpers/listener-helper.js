@@ -13,7 +13,7 @@ var imap = new Imap({
     tlsOptions          : { rejectUnauthorized: false }
 });
 
-var fetchMails = function(fetch){
+var fetchMails = function(fetch, callback){
     var mailsArr = [];
     fetch.on('message', function(msg, seqno) {
         var newmessage = {};
@@ -54,6 +54,7 @@ var fetchMails = function(fetch){
         console.log('Done fetching all messages!');
         console.log('Mails Array:');
         console.log(mailsArr);
+        callback.call(mailsArr);
     });
 }
 

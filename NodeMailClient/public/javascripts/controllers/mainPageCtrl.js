@@ -12,4 +12,7 @@ function mainPageCtrl($scope, $http, $location) {
 //        error(function(data, status, headers, config) {
 //
 //        });
+     $scope.isActive = function(route) {
+        return route === $location.path();
+     };
 };
