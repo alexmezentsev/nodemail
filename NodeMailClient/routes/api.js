@@ -1,8 +1,7 @@
 
-var mailerConfig      = require('../Constants/mailerOptions'),
-    mailHelper      = require('../Helpers/mail-helper');
-    listenerHelper      = require('../Helpers/listener-helper');
-
+var mailerConfig         = require('../Constants/mailerOptions'),
+    mailHelper           = require('../Helpers/mail-helper');
+    listenerHelper       = require('../Helpers/listener-helper');
 
 var versionInfo = function (req, res) {
     res.json({"version": "0.1"});
@@ -18,8 +17,6 @@ var getAllMails = function (req, res) {
     });
 
 };
-
-
 
 exports.getAllMails = getAllMails;
 exports.versionInfo = versionInfo;

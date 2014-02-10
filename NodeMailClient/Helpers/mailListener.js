@@ -30,7 +30,6 @@ var listenMails = function(){
     });
 
     listenerHelper.imap.connect();
-
 }
 
 var getNewMails = function(){

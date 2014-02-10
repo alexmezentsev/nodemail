@@ -29,10 +29,16 @@ var fetchMails = function(fetch, callback){
                     buffer += chunk.toString('utf8');
                 }
             });
+
             stream.once('end', function() {
                 if (info.which === 'HEADER.FIELDS (FROM TO SUBJECT DATE)')
                 {
                     newmessage.mheaders = inspect(Imap.parseHeader(buffer));
+                    var tt = newmessage.mheaders.trim();
+                    newmessage.mheaders = JSON.parse(JSON.stringify(tt));
+                    console.log(JSON.parse(JSON.stringify(tt)));
+                    console.log(typeof(newmessage.mheaders));
+                    console.log('-----------------');
                 }
                 if (info.which === 'TEXT')
                 {
