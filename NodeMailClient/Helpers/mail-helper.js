@@ -32,7 +32,6 @@ var getMails = function(calback){
      listenerHelper.fetchMails(fetch, function(){
          calback.call(this);
      });
-
 }
 
 exports.getMails = getMails;

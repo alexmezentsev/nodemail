@@ -1,6 +1,7 @@
 col-lg-12
-    div
-        p {{mailDate}}
-        p {{mailFrom}}
-        p {{mailTo}}
-        p {{mailSubject}}
+    div(ng-controller="gridCtrl")
+        table(ng-table="tableParams", class="table")
+            tr(ng-repeat="mail in mailsData")
+                td(data-title="'Body'") {{mail.mbody}}
+                td(data-title="'Id'") {{mail.mid}}
+
