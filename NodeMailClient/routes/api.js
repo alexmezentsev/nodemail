@@ -13,11 +13,7 @@ var getUserLogin = function (req, res) {
 
 var getAllMails = function (req, res) {
     mailHelper.getMails(function(){
-        var output = {total:this.length, items:[]};
-        console.log(output);
-        output.items = this;
-        console.log(output);
-        res.json(output);
+        res.json(this);
     });
 
 };

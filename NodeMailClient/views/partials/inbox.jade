@@ -2,7 +2,9 @@ col-lg-12
     div(ng-controller="gridCtrl")
         table(ng-table="tableParams", class="table")
             tr(ng-repeat="mail in mailsData")
+                td
+                    input(type="checkbox", ng-model="checkboxes.items[mails.mid]")
                 td(data-title="'Subject'") {{mail.mheaders.subject[0]}}
-                td(data-title="'Sender'") {{mail.mheaders.from[0]}}
+                td(data-title="'Sender'",sortable="from[0]") {{mail.mheaders.from[0]}}
                 td(data-title="'Date'") {{mail.mheaders.date[0]}}
 

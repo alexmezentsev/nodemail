@@ -17,9 +17,9 @@ block body
      div.mainContent(ng-controller='mainPageCtrl')
         ul.nav.nav-tabs
             li(ng-class="{active:isActive('/new')}")
-                a(href="new") New {{helloname}}
+                a(href="new") New Message
             li(ng-class="{active:isActive('/inbox')}")
-                a(href="inbox") Inbox {{helloname}}
+                a(href="inbox") Inbox ({{newMailsCount}})
         div
             div(ng-view)
 

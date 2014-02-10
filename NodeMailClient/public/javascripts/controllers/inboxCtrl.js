@@ -1,3 +1,3 @@
-function inboxCtrl($scope, $http, $route, ngTableParams) {
-    gridCtrl($scope, $http, $route, ngTableParams);
+function inboxCtrl($scope, $http, $route, $filter, $q, ngTableParams) {
+    gridCtrl($scope, $http, $route, $filter, $q, ngTableParams);
 };
