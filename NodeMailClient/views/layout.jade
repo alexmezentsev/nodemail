@@ -1,7 +1,10 @@
-doctype html
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+html(ng-app="App")
+    head
+        meta(charset='utf8')
+        base(href='/')
+        title Mail client
+        link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        link(rel='stylesheet', href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css")
+    body
+        block body

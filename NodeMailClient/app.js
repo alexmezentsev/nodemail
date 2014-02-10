@@ -9,6 +9,7 @@ var express         = require('express'),
     logger          = require('./lib/logger')(module),
     errorHandler    = require('./middleware/errorHandling'),
     mailListener    = require('./Helpers/mailListener');
+    api             = require('./routes/api');
 
 var app = express();
 
@@ -35,12 +36,24 @@ if ('development' == app.get('env')) {
 app.use(errorHandler.notFoundError);
 app.use(errorHandler.internalError);
 
-
+// Routes.
 app.get('/', routes.index);
-app.get('/users', user.list);
-app.get('/mails', mail.mail);
+app.get('/partials/:name', routes.partial);
+
+
+// JSON API.
+app.get('/api/getAllMails', api.getAllMails);
+app.get('/api/versionInfo', api.versionInfo);
+app.get('/api/userLogin', api.getUserLogin);
+
+
+//app.get('/users', user.list);
+//app.get('/mails', mail.mail);
+
+app.get('*', routes.index);
 
 http.createServer(app).listen(app.get('port'), function(){
+    // TODO: Realize mail listener as mediator.
     logger.info('Express server listening on port ' + app.get('port'));
     mailListener.listenMails();
 });

@@ -42,7 +42,9 @@ var getNewMails = function(){
                 bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
                 struct: true
             });
-            listenerHelper.fetchMails(fetch);
+            listenerHelper.fetchMails(fetch, function(){
+                //console.log(this);
+            });
         }else
         {
             logger.info("no UNSEEN mails in INBOX");
