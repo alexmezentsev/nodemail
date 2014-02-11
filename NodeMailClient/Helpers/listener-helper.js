@@ -56,9 +56,9 @@ var fetchMails = function(fetch, callback){
     fetch.once('end', function() {
         console.log('Done fetching all messages!');
         console.log('Mails Array:');
-        console.log(mailsArr);
         var output = {total:mailsArr.length, items:[]};
         output.items = mailsArr;
+        console.log(output);
         callback.call(output);
     });
 }
