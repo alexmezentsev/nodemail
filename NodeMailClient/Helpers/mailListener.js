@@ -1,6 +1,7 @@
 var listenerHelper      = require('./listener-helper'),
     inspect             = require('util').inspect,
-    logger              = require('../lib/logger')(module);
+    logger              = require('../lib/logger')(module),
+    io                  = require('socket.io');
 
 var listenMails = function(){
     logger.info("Start listening mails...");
@@ -13,9 +14,10 @@ var listenMails = function(){
             {
                 throw err;
             }
-            listenerHelper.imap.once('mail', function() {
+            listenerHelper.imap.once('mail', function(n) {
                 logger.info("NEW MAILS!");
                 getNewMails();
+                //socket.emit('newm', { hello: n });
             });
             getNewMails();
         });
@@ -42,7 +44,8 @@ var getNewMails = function(){
                 struct: true
             });
             listenerHelper.fetchMails(fetch, function(){
-                //console.log(this);
+//                var socket = io.connect('http://localhost');
+//                socket.emit('mails', this)//console.log(this);
             });
         }else
         {

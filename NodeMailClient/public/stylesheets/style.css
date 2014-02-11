@@ -158,4 +158,8 @@ a {
     max-width: 1700px;
 }
 
-
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    border-bottom: 3px solid #d3d3d3;
+}

@@ -9,7 +9,8 @@ var express         = require('express'),
     logger          = require('./lib/logger')(module),
     errorHandler    = require('./middleware/errorHandling'),
     mailListener    = require('./Helpers/mailListener');
-    api             = require('./routes/api');
+    api             = require('./routes/api'),
+    io              = require('socket.io');
 
 var app = express();
 
@@ -52,8 +53,28 @@ app.get('/api/userLogin', api.getUserLogin);
 
 app.get('*', routes.index);
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app).listen(app.get('port'), function(){
     // TODO: Realize mail listener as mediator.
     logger.info('Express server listening on port ' + app.get('port'));
     mailListener.listenMails();
+});
+
+var appSocket = io.listen(server);
+
+// CORSE allows.
+appSocket.set( 'origins', '*:*' );
+// IE 9 compability.
+appSocket.set('transports', [
+    'websocket',
+    'flashsocket',
+    'htmlfile',
+    'xhr-polling',
+    'jsonp-polling'
+]);
+
+appSocket.sockets.on('connection', function(socket) {
+    console.log("Socket connected");
+    socket.on('newm' , function (data) {
+        console.log(data);});
+    //return socket.emit('status', appState.getState());
 });

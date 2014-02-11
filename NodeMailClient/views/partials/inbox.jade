@@ -1,10 +1,23 @@
 col-lg-12
     div(ng-controller="gridCtrl")
-        table(ng-table="tableParams", class="table")
-            tr(ng-repeat="mail in mailsData")
-                td
-                    input(type="checkbox", ng-model="checkboxes.items[mails.mid]")
-                td(data-title="'Subject'") {{mail.mheaders.subject[0]}}
-                td(data-title="'Sender'",sortable="from[0]") {{mail.mheaders.from[0]}}
-                td(data-title="'Date'") {{mail.mheaders.date[0]}}
+        p
+            strong Page {{tableParams.page()}}
+        p
+            strong per page: {{tableParams.count()}}
 
+        table(ng-table="tableParams", class="table")
+            thead(style="font-weight: bold")
+                tr
+                    td(width="30", style="text-align: left")
+                        input(type="checkbox", ng-model="checkboxes.checked", id="select_all", name="filter-checkbox", value="")
+                    td Subject
+                    td Sender
+                    td Date
+            tbody
+                tr(ng-repeat="mail in $data")
+                    td(width="30", style="text-align: left")
+                        input(type="checkbox", ng-model="checkboxes.items[mail.mid]")
+                    td {{mail.mheaders.subject[0]}}
+                    td {{mail.mheaders.from[0]}}
+                    td {{mail.mheaders.date[0]}}
+        actioncheckbox

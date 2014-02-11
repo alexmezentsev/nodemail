@@ -5,27 +5,34 @@ var gridCtrl = function($scope, $http, $route, $filter, $q, ngTableParams){
             $scope.mailsData = data.items;
             $scope.totalMails = data.total;
             $scope.buildTable();
+//            var socket = io.connect('http://localhost');
+//            socket.on('mails' , function (data) {
+//                console.log(data);});
         }).
         error(function(data, status, headers, config) {
 
         });
 
-    $scope.buildTable = function(){
-        $scope.tableParams = new ngTableParams({
-            page: 1,            // show first page
-            count: 10           // count per page
-        }, {
-            total: $scope.totalMails, // length of data
-            getData: function($defer, params) {
-//                var orderedData = params.sorting() ?
-//                    $filter('orderBy')($scope.mailsData, params.orderBy()) :
-//                    $scope.mailsData;
-//                orderedData = params.filter() ?
-//                    $filter('filter')(orderedData, params.filter()) :
-//                    orderedData;
+        $scope.buildTable = function(){
+            var data = $scope.mailsData;
+            var total = $scope.totalMails
+            $scope.tableParams = new ngTableParams({
+                page: 1,            // show first page
+                count: 10           // count per page
+            }, {
+                total: total, // length of data
+                getData: function($defer, params) {
+//                  var orderedData = params.sorting() ?
+//                      $filter('orderBy')($scope.mailsData, params.orderBy()) :
+//                      $scope.mailsData;
+//                  orderedData = params.filter() ?
+//                      $filter('filter')(orderedData, params.filter()) :
+//                      orderedData;
 //
 //                params.total(orderedData.length); // set total for recalc pagination
-                $defer.resolve($scope.mailsData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+
+                $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                //console.log(fdata);
             }
         });
 
