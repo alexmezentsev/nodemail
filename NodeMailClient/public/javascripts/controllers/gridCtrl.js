@@ -3,6 +3,7 @@ var gridCtrl = function($scope, $http, $route, $filter, $q, ngTableParams){
     $http({method: 'GET', url: '/api/getAllMails'}).
         success(function(data, status, headers, config) {
             $scope.mailsData = data.items;
+            $scope.totalMails = data.total;
             $scope.buildTable();
         }).
         error(function(data, status, headers, config) {
@@ -14,7 +15,7 @@ var gridCtrl = function($scope, $http, $route, $filter, $q, ngTableParams){
             page: 1,            // show first page
             count: 10           // count per page
         }, {
-            total: $scope.mailsData.total, // length of data
+            total: $scope.totalMails, // length of data
             getData: function($defer, params) {
 //                var orderedData = params.sorting() ?
 //                    $filter('orderBy')($scope.mailsData, params.orderBy()) :
@@ -60,7 +61,7 @@ var gridCtrl = function($scope, $http, $route, $filter, $q, ngTableParams){
 
         // watch for check all checkbox
         $scope.$watch('checkboxes.checked', function(value) {
-            angular.forEach($scope.mails, function(item) {
+            angular.forEach($scope.mailsData, function(item) {
                 if (angular.isDefined(item.mid)) {
                     $scope.checkboxes.items[item.mid] = value;
                 }
@@ -69,12 +70,12 @@ var gridCtrl = function($scope, $http, $route, $filter, $q, ngTableParams){
 
         // watch for data checkboxes
         $scope.$watch('checkboxes.items', function(values) {
-            if (!$scope.mails) {
+            if (!$scope.mailsData) {
                 return;
             }
             var checked = 0, unchecked = 0,
-                total = $scope.mails.length;
-            angular.forEach($scope.mails, function(item) {
+                total = $scope.totalMails;
+            angular.forEach($scope.mailsData, function(item) {
                 checked   +=  ($scope.checkboxes.items[item.mid]) || 0;
                 unchecked += (!$scope.checkboxes.items[item.mid]) || 0;
             });
