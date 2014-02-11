@@ -36,6 +36,8 @@ var fetchMails = function(fetch, callback){
                     newmessage.mheaders = inspect(Imap.parseHeader(buffer));
                     var obj = eval("(" + newmessage.mheaders + ")");
                     newmessage.mheaders = obj;
+                    var date = new Date(obj.date[0]).toString().slice(4, 10);
+                    newmessage.mshortdate = date;
                 }
                 if (info.which === 'TEXT')
                 {
@@ -55,6 +57,10 @@ var fetchMails = function(fetch, callback){
     });
     fetch.once('end', function() {
         console.log('Done fetching all messages!');
+//        for(var item in mailsArr){
+//            var date = new Date(mailsArr[item].mheaders.date[0]).toString().slice(4, 10);
+//            mailsArr[item].mheaders.date[0] = date;
+//        }
         console.log('Mails Array:');
         var output = {total:mailsArr.length, items:[]};
         output.items = mailsArr;
