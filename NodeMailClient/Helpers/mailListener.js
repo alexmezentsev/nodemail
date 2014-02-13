@@ -3,7 +3,7 @@ var listenerHelper      = require('./listener-helper'),
     logger              = require('../lib/logger')(module),
     io                  = require('socket.io');
 
-var listenMails = function(){
+var listenMails = function(socket){
     logger.info("Start listening mails...");
     function openInbox(cb) {
         listenerHelper.imap.openBox('INBOX', true, cb);
@@ -16,10 +16,10 @@ var listenMails = function(){
             }
             listenerHelper.imap.once('mail', function(n) {
                 logger.info("NEW MAILS!");
-                getNewMails();
+                getNewMails(false, socket);
                 //socket.emit('newm', { hello: n });
             });
-            getNewMails();
+            getNewMails(true);
         });
     });
 
@@ -34,7 +34,7 @@ var listenMails = function(){
     listenerHelper.imap.connect();
 }
 
-var getNewMails = function(){
+var getNewMails = function(isAppStarting, socket){
     listenerHelper.imap.search([ 'UNSEEN' ], function(err, results) {
         if (results.length !== 0)
         {
@@ -44,8 +44,10 @@ var getNewMails = function(){
                 struct: true
             });
             listenerHelper.fetchMails(fetch, function(){
-//                var socket = io.connect('http://localhost');
-//                socket.emit('mails', this)//console.log(this);
+                if(!isAppStarting){
+                    //var socket = io.connect('http://localhost');
+                    socket.emit('mails', this)//console.log(this);
+                }
             });
         }else
         {

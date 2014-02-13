@@ -57,13 +57,9 @@ var fetchMails = function(fetch, callback){
     });
     fetch.once('end', function() {
         console.log('Done fetching all messages!');
-//        for(var item in mailsArr){
-//            var date = new Date(mailsArr[item].mheaders.date[0]).toString().slice(4, 10);
-//            mailsArr[item].mheaders.date[0] = date;
-//        }
         console.log('Mails Array:');
         var output = {total:mailsArr.length, items:[]};
-        output.items = mailsArr;
+        output.items = mailsArr.reverse();
         console.log(output);
         callback.call(output);
     });

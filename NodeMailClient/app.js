@@ -56,7 +56,7 @@ app.get('*', routes.index);
 var server = http.createServer(app).listen(app.get('port'), function(){
     // TODO: Realize mail listener as mediator.
     logger.info('Express server listening on port ' + app.get('port'));
-    mailListener.listenMails();
+    //mailListener.listenMails();
 });
 
 var appSocket = io.listen(server);
@@ -76,5 +76,5 @@ appSocket.sockets.on('connection', function(socket) {
     console.log("Socket connected");
     socket.on('newm' , function (data) {
         console.log(data);});
-    //return socket.emit('status', appState.getState());
+    mailListener.listenMails(socket);
 });

@@ -8,4 +8,6 @@ function appCtrl($scope, $http) {
         error(function(data, status, headers, config) {
             $scope.userlogin = ''
         });
+    var socket = io.connect('http://localhost');
+    socket.emit('App', 'Connected');
 };

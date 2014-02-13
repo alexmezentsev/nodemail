@@ -1,68 +1,50 @@
 'use strict';
 var gridCtrl = function($scope, $http, $route, $filter, $q, ngTableParams){
+
+
+
     $http({method: 'GET', url: '/api/getAllMails'}).
         success(function(data, status, headers, config) {
             $scope.mailsData = data.items;
             $scope.totalMails = data.total;
+
+            var socket = io.connect('http://localhost');
+            socket.on('mails' , function (newData) {
+                $scope.$apply(function(){
+                    $scope.mailsData = newData.items;
+                    $scope.totalMails = newData.total;
+                });
+                $scope.tableParams.reload();
+            });
+
             $scope.buildTable();
-//            var socket = io.connect('http://localhost');
-//            socket.on('mails' , function (data) {
-//                console.log(data);});
         }).
         error(function(data, status, headers, config) {
 
         });
 
-        $scope.buildTable = function(){
-            var data = $scope.mailsData;
-            var total = $scope.totalMails
-            $scope.tableParams = new ngTableParams({
-                page: 1,            // show first page
-                count: 10           // count per page
-            }, {
-                total: total, // length of data
-                getData: function($defer, params) {
+
+
+    $scope.buildTable = function(){
+        $scope.tableParams = new ngTableParams({
+            page: 1,            // show first page
+            count: 10           // count per page
+        }, {
+            total: function () { return $scope.totalMails }, // length of data
+            getData: function($defer, params) {
+                var data = $scope.mailsData;
+                var total = $scope.totalMails;
 //                  var orderedData = params.sorting() ?
 //                      $filter('orderBy')($scope.mailsData, params.orderBy()) :
 //                      $scope.mailsData;
 //                  orderedData = params.filter() ?
 //                      $filter('filter')(orderedData, params.filter()) :
 //                      orderedData;
-//
-//                params.total(orderedData.length); // set total for recalc pagination
 
+                params.total(total); // set total for recalc pagination
                 $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-                //console.log(fdata);
             }
         });
-
-        var inArray = Array.prototype.indexOf ?
-            function (val, arr) {
-                return arr.indexOf(val)
-            } :
-            function (val, arr) {
-                var i = arr.length;
-                while (i--) {
-                    if (arr[i] === val) return i;
-                }
-                return -1
-            };
-        $scope.names = function(column) {
-            var def = $q.defer(),
-                arr = [],
-                names = [];
-            angular.forEach($scope.mailsData, function(item){
-                if (inArray(item.name, arr) === -1) {
-                    arr.push(item.name);
-                    names.push({
-                        'id': item.name,
-                        'title': item.name
-                    });
-                }
-            });
-            def.resolve(names);
-            return def;
-        };
 
         $scope.checkboxes = { 'checked': false, items: {} };
 
@@ -89,10 +71,8 @@ var gridCtrl = function($scope, $http, $route, $filter, $q, ngTableParams){
             if ((unchecked == 0) || (checked == 0)) {
                 $scope.checkboxes.checked = (checked == total);
             }
-            // grayed checkbox
+            //grayed checkbox
             angular.element(document.getElementById("select_all")).prop("indeterminate", (checked != 0 && unchecked != 0));
         }, true);
-
     };
-
 };
