@@ -1,28 +1,34 @@
 'use strict';
-var gridCtrl = function($scope, $http, $route, $filter, $q, ngTableParams){
+var gridCtrl = function($scope, $rootScope, $http, $route, $filter, $q, ngTableParams){
 
-
-
-    $http({method: 'GET', url: '/api/getAllMails'}).
+    var url = '/api/getAllMails/'+$rootScope.folder;
+    console.log(url);
+    $http({method: 'GET', url: url}).
         success(function(data, status, headers, config) {
-            $scope.mailsData = data.items;
-            $scope.totalMails = data.total;
-
             var socket = io.connect('http://localhost');
             socket.on('mails' , function (newData) {
                 $scope.$apply(function(){
                     $scope.mailsData = newData.items;
                     $scope.totalMails = newData.total;
+                    $rootScope.inboxCount = newData.total;
                 });
                 $scope.tableParams.reload();
             });
-
+            $scope.mailsData = data.items;
+            $scope.totalMails = data.total;
+            if($rootScope.folder === 1){
+                socket.emit('sentCount', data.total);
+                $rootScope.sentCount = data.total;
+            }
+            if($rootScope.folder === 2){
+                socket.emit('trashCount', data.total);
+                $rootScope.trashCount = data.total;
+            }
             $scope.buildTable();
         }).
         error(function(data, status, headers, config) {
 
         });
-
 
 
     $scope.buildTable = function(){

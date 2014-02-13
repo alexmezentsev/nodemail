@@ -4,7 +4,7 @@ var config              = require('../lib/config'),
     inspect             = require('util').inspect,
     logger              = require('../lib/logger')(module);
 
-var imap = new Imap({
+var imapInbox = new Imap({
     user                : mailerConfig.credentials.User,
     password            : mailerConfig.credentials.Pass,
     host                : mailerConfig.imapOptions.ImapHost,
@@ -12,6 +12,40 @@ var imap = new Imap({
     tls                 : true,
     tlsOptions          : { rejectUnauthorized: false }
 });
+
+var imapSent = new Imap({
+    user                : mailerConfig.credentials.User,
+    password            : mailerConfig.credentials.Pass,
+    host                : mailerConfig.imapOptions.ImapHost,
+    port                : mailerConfig.imapOptions.ImapPort,
+    tls                 : true,
+    tlsOptions          : { rejectUnauthorized: false }
+});
+
+var imapTrash = new Imap({
+    user                : mailerConfig.credentials.User,
+    password            : mailerConfig.credentials.Pass,
+    host                : mailerConfig.imapOptions.ImapHost,
+    port                : mailerConfig.imapOptions.ImapPort,
+    tls                 : true,
+    tlsOptions          : { rejectUnauthorized: false }
+});
+
+var folders = [
+    {
+        fName           : mailerConfig.imapGmail.Inbox,
+        fConnection     : imapInbox },
+    {
+        fName           : mailerConfig.imapGmail.Sent,
+        fConnection     : imapSent },
+    {
+        fName           : mailerConfig.imapGmail.Trash,
+        fConnection     : imapTrash }
+]
+
+function openBox(connection, box, cb) {
+    connection.openBox(box, true, cb);
+}
 
 var fetchMails = function(fetch, callback){
     var mailsArr = [];
@@ -67,4 +101,11 @@ var fetchMails = function(fetch, callback){
 
 exports.fetchMails = fetchMails;
 
-exports.imap = imap;
+exports.openBox = openBox;
+
+exports.folders = folders;
+
+exports.imapInbox = imapInbox;
+
+exports.imapSent = imapSent;
+

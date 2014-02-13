@@ -43,7 +43,7 @@ app.get('/partials/:name', routes.partial);
 
 
 // JSON API.
-app.get('/api/getAllMails', api.getAllMails);
+app.get('/api/getAllMails/:folderId', api.getAllMails);
 app.get('/api/versionInfo', api.versionInfo);
 app.get('/api/userLogin', api.getUserLogin);
 

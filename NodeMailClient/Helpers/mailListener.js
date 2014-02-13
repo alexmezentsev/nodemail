@@ -5,41 +5,40 @@ var listenerHelper      = require('./listener-helper'),
 
 var listenMails = function(socket){
     logger.info("Start listening mails...");
-    function openInbox(cb) {
-        listenerHelper.imap.openBox('INBOX', true, cb);
-    }
-    listenerHelper.imap.once('ready', function() {
-        openInbox(function(err, box) {
+    var connection = listenerHelper.folders[0].fConnection;
+    var folder = listenerHelper.folders[0].fName;
+    connection.once('ready', function() {
+
+        listenerHelper.openBox(connection, folder, function(err, box) {
             if (err)
             {
                 throw err;
             }
-            listenerHelper.imap.once('mail', function(n) {
+            connection.once('mail', function(n) {
                 logger.info("NEW MAILS!");
-                getNewMails(false, socket);
-                //socket.emit('newm', { hello: n });
+                getNewMails(false, connection, socket);
             });
-            getNewMails(true);
+            getNewMails(true, connection, socket);
         });
     });
 
-    listenerHelper.imap.once('error', function(err) {
+    connection.once('error', function(err) {
         logger.error(err);
     });
 
-    listenerHelper.imap.once('end', function() {
+    connection.once('end', function() {
         logger.info('Connection ended');
     });
 
-    listenerHelper.imap.connect();
+    connection.connect();
 }
 
-var getNewMails = function(isAppStarting, socket){
-    listenerHelper.imap.search([ 'UNSEEN' ], function(err, results) {
+var getNewMails = function(isAppStarting, connection, socket){
+    connection.search([ 'UNSEEN' ], function(err, results) {
         if (results.length !== 0)
         {
             logger.info("You have " + results.length + " unseen mails");
-            var fetch = listenerHelper.imap.fetch(results, {
+            var fetch = connection.fetch(results, {
                 bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
                 struct: true
             });

@@ -13,5 +13,9 @@
     "imapMailbox" : "INBOX",
     "imapMarkSeen" : true,
     "imapFetchUnreadOnStart" : true,
-    "cookieParserPass" : "password"
+    "cookieParserPass" : "password",
+
+    "gmailInbox" : "INBOX",
+    "gmailSentMails" : "[Gmail]/Sent Mail",
+    "gmailTrash" : "[Gmail]/Trash"
 }

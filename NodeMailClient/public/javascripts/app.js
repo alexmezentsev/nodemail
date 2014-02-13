@@ -12,6 +12,14 @@ angular.module('App', ['ngRoute', 'App.directives', 'ui.bootstrap', 'ngTable']).
                 templateUrl: 'partials/newMessage',
                 controller: inboxCtrl
             }).
+            when('/sent', {
+                templateUrl: 'partials/sent',
+                controller: sentCtrl
+            }).
+            when('/trash', {
+                templateUrl: 'partials/trash',
+                controller: trashCtrl
+            }).
             otherwise({
                 redirectTo: '/inbox'
             });

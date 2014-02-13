@@ -12,7 +12,8 @@ var getUserLogin = function (req, res) {
 };
 
 var getAllMails = function (req, res) {
-    mailHelper.getMails(function(){
+    var folderId = req.params.folderId;
+    mailHelper.getMails(folderId, function(){
         res.json(this);
     });
 

@@ -11,6 +11,7 @@ exports.mailerTransportOptions = {
 };
 
 exports.imapOptions = {
+    imapMainBox             : nodeConfig.get('imapMainBox'),
     ImapHost                : nodeConfig.get('imapHost'),
     ImapPort                : nodeConfig.get('imapPort'),
     ImapSecure              : nodeConfig.get('imapSecure'),
@@ -18,3 +19,9 @@ exports.imapOptions = {
     ImapMarkSeen            : nodeConfig.get('imapMarkSeen'),
     ImapFetchUnreadOnStart  : nodeConfig.get('imapFetchUnreadOnStart')
 };
+
+exports.imapGmail = {
+    Inbox               : nodeConfig.get('gmailInbox'),
+    Sent                : nodeConfig.get('gmailSentMails'),
+    Trash               : nodeConfig.get('gmailTrash')
+}

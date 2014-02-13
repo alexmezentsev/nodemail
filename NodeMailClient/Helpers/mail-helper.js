@@ -24,14 +24,56 @@ var sendMail = function(){
     });
 }
 
-var getMails = function(calback){
-     var fetch = listenerHelper.imap.seq.fetch('1:*', {
-         bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
-         struct: true
-         });
-     listenerHelper.fetchMails(fetch, function(){
-         calback.call(this);
-     });
+var getMails = function(folder, callback){
+
+    var connection = listenerHelper.folders[folder].fConnection;
+    var folderName = listenerHelper.folders[folder].fName;
+
+    if(folder === 0)
+    {
+        fetchAll(connection, function(){
+            callback.call(this);
+        });
+    }
+    else
+    {
+        connection.connect();
+
+        connection.once('ready', function() {
+            listenerHelper.openBox(connection, folderName, function(err, box) {
+                if (err)
+                {
+                    throw err;
+                }
+                fetchAll(connection, function(){
+
+                    callback.call(this);
+                    if(folder === 1){
+
+                    }
+                    //connection.end();
+                });
+            });
+        });
+
+        connection.once('error', function(err) {
+            logger.error(err);
+        });
+
+        connection.once('end', function() {
+            logger.info('Connection ended');
+        });
+    }
+}
+
+var fetchAll = function(connection, callback){
+    var fetch = connection.seq.fetch('1:*', {
+        bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
+        struct: true
+    });
+    listenerHelper.fetchMails(fetch, function(){
+        callback.call(this);
+    });
 }
 
 exports.getMails = getMails;
